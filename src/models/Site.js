@@ -21,6 +21,10 @@ const siteSchema = new mongoose.Schema({
     createdAt:{
         type: Date,
         required: true
+    },
+    contrat:{
+        type: String,
+        required: true
     }
 })
 
