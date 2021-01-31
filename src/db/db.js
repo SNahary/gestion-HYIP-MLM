@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const connection = mongoose.connect('mongodb://localhost:27017/pub-hyip',{
+mongoose.connect(process.env.MONGODB_URL,{
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true
