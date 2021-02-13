@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const Site = require('../models/Site')
+const auth = require('../middleware/auth')
 
 router.get('/sites', async (req,res) => {
     try {
@@ -12,7 +13,7 @@ router.get('/sites', async (req,res) => {
     }
 })
 
-router.post('/sites', async (req,res) =>{
+router.post('/sites', auth , async (req,res) =>{
     try {
         const site = new Site(req.body)
         await site.save()
@@ -22,7 +23,7 @@ router.post('/sites', async (req,res) =>{
     }
 })
 
-router.patch('/sites/:id', async (req,res) => {
+router.patch('/sites/:id', auth , async (req,res) => {
     const updates = Object.keys(req.body)
     const allowedUpdate = ['name','description','contrat','minimumInvest','minimumWithdrawal','createdAt']
     const isAllowed = updates.every(update => allowedUpdate.includes(update))
@@ -48,7 +49,7 @@ router.patch('/sites/:id', async (req,res) => {
     }
 })
 
-router.delete('/sites/:id', async (req,res) => {
+router.delete('/sites/:id', auth , async (req,res) => {
     try {
         const site = await Site.findOneAndDelete({ _id: req.params.id})
         res.send(site)

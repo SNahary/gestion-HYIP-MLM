@@ -4,23 +4,43 @@ const router = express.Router()
 const User = require('../models/User')
 const auth = require('../middleware/auth')
 
-router.get('/users',auth,async(req,res) => {
-    try {
-        const users = await User.find({})
-        res.send(users)
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
-
 router.post('/users', async(req,res) => {
     try {
         const user = new User(req.body)
         const token = await user.generateAuthToken()
         await user.save()
         res.status(201).send({user,token})
-    } catch (error) {
+    } catch (error) {     
+        console.log(req.body)
         res.status(400).send(error)
+    }
+})
+router.post('/users/login', async (req,res) => {
+    try{
+        const user = await User.findByCredentials(req.body.email,req.body.password)
+        const token = await user.generateAuthToken()
+        res.status(200).send({user,token})
+    }catch(error){
+        res.status(400).send({'error' : error})
+    }
+})
+
+router.post('/users/logout',auth, async (req,res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter(t => t.token !== req.token)
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+router.get('/users',auth,async(req,res) => {
+    try {
+        const users = await User.find({})
+        res.send(users)
+    } catch (error) {
+        res.status(500).send(error)
     }
 })
 
@@ -54,3 +74,5 @@ router.delete('/users/:id', auth , async(req,res) => {
         res.status(500).send(error)
     }
 })
+
+module.exports = router

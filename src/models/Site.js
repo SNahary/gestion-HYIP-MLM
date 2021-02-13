@@ -8,7 +8,8 @@ const siteSchema = new mongoose.Schema({
     },
     description:{
         type: String,
-        required: true
+        required: true,
+        minLength: 50
     },
     minimumInvest:{
         type: Number,
@@ -18,10 +19,10 @@ const siteSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    createdAt:{
-        type: Date,
-        required: true
-    },
+    // createdAt:{
+    //     type: Date,
+    //     required: true
+    // },
     contrat:{
         type: String,
         required: true
