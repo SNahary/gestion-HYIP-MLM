@@ -49,7 +49,7 @@ router.get("/users", auth, async (req, res) => {
     const count = await User.countDocuments();
     const totalPages = Math.ceil(count / limit);
 
-    res.send({ users, totalPages, page });
+    res.send({ users, totalPages, currentPage: page });
   } catch (error) {
     res.status(500).send(error);
   }
