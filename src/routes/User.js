@@ -43,7 +43,7 @@ router.get("/users", auth, async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     const users = await User.find()
-      .limit(limit * 1)
+      .limit(limit)
       .skip((page - 1) * limit)
       .exec();
     const count = await User.countDocuments();
