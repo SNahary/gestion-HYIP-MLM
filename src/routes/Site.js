@@ -6,8 +6,13 @@ const auth = require('../middleware/auth')
 
 router.get('/sites', async (req,res) => {
     try {
-        const listSite = await Site.find({})
-        res.status(200).send(listSite)
+        const {page=1 , limit=20} = req.query
+
+        const listSite = await Site.find().limit(limit * 1).skip((page - 1) * limit)
+        const count = await Site.countDocuments()
+        const totalPages = Math.ceil(count / limit)
+        
+        res.status(200).send({listSite, totalPages, currentPage: page})
     } catch (error) {
         res.status(500).send(error)
     }
