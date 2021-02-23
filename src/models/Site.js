@@ -8,6 +8,7 @@ const siteSchema = new mongoose.Schema({
     },
     description:{
         type: String,
+        trim: true,
         required: true,
         minLength: 50
     },
@@ -19,12 +20,13 @@ const siteSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    // createdAt:{
-    //     type: Date,
-    //     required: true
-    // },
+    createdAt:{
+        type: Date,
+        required: true
+    },
     contrat:{
         type: String,
+        trim: true,
         required: true
     }
 })

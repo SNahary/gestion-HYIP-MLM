@@ -60,6 +60,7 @@ router.patch('/users/:id', auth , async(req,res) => {
             res.status(404).send('User not found')
         }
         updates.forEach(update => user[update] = req.body[update])
+        await user.save()
         res.send(user)
     } catch (error) {
         res.status(500).send(error)
