@@ -21,7 +21,7 @@ router.post('/users/login', async (req,res) => {
         const token = await user.generateAuthToken()
         res.status(200).send({user,token})
     }catch(error){
-        res.status(400).send({'error' : error})
+        res.status(400).send({error})
     }
 })
 
@@ -60,6 +60,7 @@ router.patch('/users/:id', auth , async(req,res) => {
             res.status(404).send('User not found')
         }
         updates.forEach(update => user[update] = req.body[update])
+        await user.save()
         res.send(user)
     } catch (error) {
         res.status(500).send(error)
@@ -69,6 +70,9 @@ router.patch('/users/:id', auth , async(req,res) => {
 router.delete('/users/:id', auth , async(req,res) => {
     try {
         const user = await User.findOneAndDelete({ _id : req.params.id })
+        if(!user){
+            return res.status(404).send({'error': 'User not found'})
+        }
         res.send(user)
     } catch (error) {
         res.status(500).send(error)
